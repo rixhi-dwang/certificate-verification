@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: 'Manrope', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  @apply bg-slate-950 text-slate-100 antialiased;
+}
+
+.bg-app-gradient {
+  background-image:
+    radial-gradient(circle at 8% 14%, rgba(34, 211, 238, 0.16), transparent 35%),
+    radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.17), transparent 36%),
+    radial-gradient(circle at 52% 82%, rgba(59, 130, 246, 0.16), transparent 32%),
+    linear-gradient(160deg, #030712 0%, #0b1120 45%, #0f172a 100%);
+}
+
+.glass-card {
+  @apply border border-white/15 bg-white/5 shadow-2xl backdrop-blur-xl;
+  box-shadow: 0 20px 45px rgba(2, 6, 23, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.input-base {
+  @apply w-full rounded-xl border border-white/20 bg-slate-950/70 px-3 py-2.5 text-sm text-slate-100 placeholder:text-slate-400/80 transition focus:border-cyan-300 focus:outline-none focus:ring-2 focus:ring-cyan-300/30;
+}
+
+.btn-primary {
+  @apply inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-4 py-2.5 text-sm font-semibold text-slate-950 transition hover:scale-[1.02] hover:from-cyan-300 hover:to-blue-400 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100;
+}
+
+.btn-secondary {
+  @apply inline-flex items-center justify-center rounded-xl border border-cyan-300/40 bg-cyan-500/10 px-4 py-2.5 text-sm font-medium text-cyan-100 transition hover:bg-cyan-400/20 disabled:cursor-not-allowed disabled:opacity-55;
+}
+
+.card-hover {
+  @apply transition duration-200 hover:-translate-y-0.5 hover:border-cyan-200/30;
+}
+
+.result-enter {
+  animation: result-fade 260ms ease-out;
+}
+
+@keyframes result-fade {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 999px;
+}
