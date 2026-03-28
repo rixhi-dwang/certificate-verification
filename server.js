@@ -9,7 +9,7 @@ const app = express();
 const PORT = Number(process.env.PORT) || 3000;
 
 const SHEETDB_API_URL = process.env.SHEETDB_API_URL || null;
-/// sheetdb api ko .env fiel me dal dena 👉👈 😈😈👉👌💦💦
+
 if (!SHEETDB_API_URL) {
   console.log("[warning] No API connected yet");
 }
@@ -71,7 +71,8 @@ app.get('/verify/:certificate_no', async (req, res) => {
     const normalizedInput = certificateNo.toLowerCase();
 
     const match = rows.find((row) => {
-      const rowCertificateNo = sanitizeInput(row?.certificate_no ?? '').toLowerCase();
+      // Trying to match based on registrationNo or transactionID/UTRNumber since there is no certificate_no in the sheet
+      const rowCertificateNo = sanitizeInput(row?.registrationNo || row?.['transactionID/UTRNumber'] || '').toLowerCase();
       return rowCertificateNo === normalizedInput;
     });
 
