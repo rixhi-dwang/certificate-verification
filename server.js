@@ -18,31 +18,18 @@ app.disable('x-powered-by');
 app.use(cors());
 app.use(express.json({ limit: '100kb' }));
 
-// Basic request logging with response time.
-app.use((req, res, next) => {
-  const startedAt = Date.now();
-
-  res.on('finish', () => {
-    const durationMs = Date.now() - startedAt;
-    console.log(
-      `[${new Date().toISOString()}] ${req.ip} ${req.method} ${req.originalUrl} ${res.statusCode} ${durationMs}ms`
-    );
-  });
-
-  next();
+// ✅ Root route (IMPORTANT)
+app.get('/', (req, res) => {
+  res.send('Backend running 🚀');
 });
 
 const sheetDbClient = axios.create({
   timeout: 10000,
-  headers: {
-    Accept: 'application/json',
-  },
+  headers: { Accept: 'application/json' },
 });
 
 function sanitizeInput(value) {
   if (value === null || value === undefined) return '';
-
-  // Remove control characters, then trim surrounding whitespace.
   return String(value).replace(/[\u0000-\u001F\u007F]/g, '').trim();
 }
 
@@ -50,12 +37,13 @@ async function fetchSheetRows() {
   const response = await sheetDbClient.get(SHEETDB_API_URL);
 
   if (!Array.isArray(response.data)) {
-    throw new Error('Invalid SheetDB response format. Expected an array of rows.');
+    throw new Error('Invalid SheetDB response');
   }
 
   return response.data;
 }
 
+// ✅ ONLY VERIFY ROUTE
 app.get('/verify/:certificate_no', async (req, res) => {
   const certificateNo = sanitizeInput(req.params.certificate_no);
 
@@ -71,8 +59,10 @@ app.get('/verify/:certificate_no', async (req, res) => {
     const normalizedInput = certificateNo.toLowerCase();
 
     const match = rows.find((row) => {
-      // Trying to match based on registrationNo or transactionID/UTRNumber since there is no certificate_no in the sheet
-      const rowCertificateNo = sanitizeInput(row?.registrationNo || row?.['transactionID/UTRNumber'] || '').toLowerCase();
+      const rowCertificateNo = sanitizeInput(
+        row?.registrationNo || row?.['transactionID/UTRNumber'] || ''
+      ).toLowerCase();
+
       return rowCertificateNo === normalizedInput;
     });
 
@@ -88,10 +78,7 @@ app.get('/verify/:certificate_no', async (req, res) => {
       data: match,
     });
   } catch (error) {
-    console.error('[verify] SheetDB API request failed', {
-      message: error.message,
-      status: error.response?.status,
-    });
+    console.error('[verify] error', error.message);
 
     return res.status(500).json({
       status: 'error',
@@ -100,9 +87,9 @@ app.get('/verify/:certificate_no', async (req, res) => {
   }
 });
 
-// Fallback for unknown routes.
+// ❌ Fallback
 app.use((req, res) => {
-  return res.status(404).json({
+  res.status(404).json({
     status: 'error',
     message: 'Route not found',
   });
