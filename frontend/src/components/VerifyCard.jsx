@@ -23,7 +23,7 @@ export default function VerifyCard() {
 
     const cleanId = certificateId.trim();
     if (!cleanId) {
-      setError('Registration No / Transaction ID is required.');
+      setError('Certificate No is required.');
       setResult(null);
       return;
     }
@@ -59,14 +59,14 @@ export default function VerifyCard() {
     <section className="glass-card card-hover rounded-2xl p-5 sm:p-6">
       <div>
         <h2 className="text-lg font-semibold text-white sm:text-xl">Participant Verification</h2>
-        <p className="mt-1 text-sm text-slate-300/80">Verify participant details instantly using Registration No or Transaction ID.</p>
+        <p className="mt-1 text-sm text-slate-300/80">Verify participant details instantly using Certificate No.</p>
       </div>
 
       <form className="mt-5 flex flex-col gap-3 sm:flex-row" onSubmit={handleVerify}>
         <input
           value={certificateId}
           onChange={(event) => setCertificateId(event.target.value)}
-          placeholder="Enter Reg No or Transaction ID"
+          placeholder="Enter Certificate No"
           className="input-base flex-1"
           maxLength={120}
         />
@@ -98,8 +98,8 @@ export default function VerifyCard() {
               <p className="mt-1 font-medium text-white">{getField(validData, ['fullName', 'name', 'full_name'])}</p>
             </div>
             <div className="rounded-xl border border-emerald-200/20 bg-black/10 p-3">
-              <p className="text-emerald-200/80">Certificate ID / Reg No</p>
-              <p className="mt-1 font-medium text-white">{getField(validData, ['registrationNo', 'transactionID/UTRNumber', 'certificate_no'])}</p>
+              <p className="text-emerald-200/80">Certificate No</p>
+              <p className="mt-1 font-medium text-white">{getField(validData, ['Certificate_no'])}</p>
             </div>
             <div className="rounded-xl border border-emerald-200/20 bg-black/10 p-3">
               <p className="text-emerald-200/80">Program / Event</p>

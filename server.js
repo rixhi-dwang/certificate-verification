@@ -60,7 +60,7 @@ app.get('/verify/:certificate_no', async (req, res) => {
 
     const match = rows.find((row) => {
       const rowCertificateNo = sanitizeInput(
-        row?.registrationNo || row?.['transactionID/UTRNumber'] || ''
+        row?.Certificate_no || ''
       ).toLowerCase();
 
       return rowCertificateNo === normalizedInput;
